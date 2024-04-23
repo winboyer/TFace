@@ -10,7 +10,7 @@ import numpy as np
 from scipy import stats
 import pdb
 from PIL import Image
-
+import time
 
 def read_img(imgPath):     # read image & data pre-process
     data = torch.randn(1, 3, 112, 112)
@@ -35,10 +35,14 @@ def network(eval_model, device):
     return net
 
 if __name__ == "__main__":
-    imgpath = './demo_imgs/1.jpg'                         # [1,2,3.jpg]
+    imgpath = './demo_imgs/3.jpg'                         # [1,2,3.jpg]
     device = 'cpu'                                        # 'cpu' or 'cuda:x'
-    eval_model = './model/SDD_FIQA_checkpoints_r50.pth'   # checkpoint
+#     eval_model = './model/SDD_FIQA_checkpoints_r50.pth'   # checkpoint
+    eval_model = '/root/jinyfeng/models/faceQuality/SDD_FIQA_checkpoints_r50.pth'   # checkpoint
     net = network(eval_model, device)
     input_data = read_img(imgpath)
+    time_s = time.time()
     pred_score = net(input_data).data.cpu().numpy().squeeze()
+    time_e = time.time()
+    print('cost time ============ ', time_e-time_s)
     print(f"Quality score = {pred_score}")
